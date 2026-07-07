@@ -139,3 +139,4 @@ No application code changes — SQLAlchemy maps the models to either database.
   with no real processor — clearly labelled as a demo checkout.
 - The backend is verified by `backend/smoke_test.py`, which exercises register →
   onboard → discover → send → deliver/read → achievements → premium → admin RBAC.
+"# PenPalPlus-main" 
