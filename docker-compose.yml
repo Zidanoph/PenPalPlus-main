@@ -1,0 +1,23 @@
+# Optional PostgreSQL for PenPal+.
+# The app runs on SQLite by default; this is only needed if you want to point
+# DATABASE_URL at Postgres. Bring it up with:  docker compose up -d db
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: penpal-db
+    environment:
+      POSTGRES_USER: penpal
+      POSTGRES_PASSWORD: penpal
+      POSTGRES_DB: penpal
+    ports:
+      - "5432:5432"
+    volumes:
+      - penpal_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpal"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  penpal_pgdata:

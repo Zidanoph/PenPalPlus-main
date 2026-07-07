@@ -1,0 +1,330 @@
+/* ============================================================================
+   PenPal+ — vintage airmail design system
+   Palette: deep navy ink on warm manila paper, with postal red & airmail blue
+   used sparingly as accents. Type: Fraunces (display), Spectral (letter body),
+   Courier Prime (addresses, stamps, tracking, data).
+   ========================================================================== */
+
+:root {
+  --ink:        #20304d;  /* deep navy fountain-pen ink — primary text     */
+  --ink-soft:   #41506a;
+  --paper:      #f0e8d6;  /* warm manila — app background                  */
+  --paper-2:    #fbf6ea;  /* lighter card stock                            */
+  --paper-edge: #e4d9c0;  /* envelope edge / hairlines                     */
+  --postal-red: #b23a2e;  /* stamp & postmark accent — use sparingly       */
+  --postal-blue:#2b4c7e;  /* airmail blue                                  */
+  --sepia:      #7a6a55;  /* faded ink, secondary labels, borders          */
+  --seal-gold:  #b8893b;  /* premium, achievements, wax seal               */
+  --ok:         #4b7d5b;
+  --danger:     #b23a2e;
+
+  --shadow-sm: 0 1px 2px rgba(32, 48, 77, 0.10);
+  --shadow-md: 0 6px 22px rgba(32, 48, 77, 0.14);
+  --shadow-lg: 0 18px 48px rgba(32, 48, 77, 0.20);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body:    "Spectral", Georgia, serif;
+  --font-mono:    "Courier Prime", "Courier New", monospace;
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+
+  --w-page: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--paper);
+  /* faint paper grain + airmail tint at the corners */
+  background-image:
+    radial-gradient(circle at 12% -10%, rgba(43, 76, 126, 0.05), transparent 42%),
+    radial-gradient(circle at 92% 108%, rgba(178, 58, 46, 0.05), transparent 40%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  margin: 0 0 0.4em;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; }
+h2 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+h3 { font-size: 1.25rem; }
+
+a { color: var(--postal-blue); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+p { margin: 0 0 1rem; }
+
+/* ---- utility / data type ------------------------------------------------ */
+.mono { font-family: var(--font-mono); }
+.eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  color: var(--sepia);
+}
+.muted { color: var(--sepia); }
+
+/* ============================================================================
+   Signature element: the airmail border — red & blue dashes around an edge.
+   Used as a framing device on cards, the auth panel, and letters.
+   ========================================================================== */
+.airmail-edge {
+  position: relative;
+  background: var(--paper-2);
+  border-radius: var(--r-lg);
+}
+.airmail-edge::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: calc(var(--r-lg) - 4px);
+  padding: 3px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--postal-red) 0, var(--postal-red) 11px,
+    var(--paper-2) 11px, var(--paper-2) 22px,
+    var(--postal-blue) 22px, var(--postal-blue) 33px,
+    var(--paper-2) 33px, var(--paper-2) 44px
+  );
+  /* mask so only the border ring shows */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---- cards -------------------------------------------------------------- */
+.card {
+  background: var(--paper-2);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+.card-pad { padding: 22px 24px; }
+
+/* ---- buttons ------------------------------------------------------------ */
+.btn {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.82rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper-2);
+  padding: 11px 20px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.btn:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: rgba(32, 48, 77, 0.06); }
+.btn-red { background: var(--postal-red); border-color: var(--postal-red); }
+.btn-gold { background: var(--seal-gold); border-color: var(--seal-gold); color: #2a1f0c; }
+.btn-sm { padding: 7px 13px; font-size: 0.74rem; }
+
+/* ---- forms -------------------------------------------------------------- */
+.field { margin-bottom: 16px; }
+.field > label {
+  display: block;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  color: var(--sepia);
+  margin-bottom: 6px;
+}
+.input, .textarea, select.input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-bottom: 2px solid var(--sepia);
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  padding: 10px 12px;
+}
+.input:focus, .textarea:focus, select.input:focus {
+  outline: none;
+  border-bottom-color: var(--postal-blue);
+  background: var(--paper-2);
+}
+.textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+
+/* ---- pills / chips ------------------------------------------------------ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--paper-edge);
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: default;
+}
+.chip.selectable { cursor: pointer; }
+.chip.on { background: var(--postal-blue); color: var(--paper-2); border-color: var(--postal-blue); }
+.chip.teach { border-color: var(--ok); color: var(--ok); }
+.chip.learn { border-color: var(--postal-blue); color: var(--postal-blue); }
+
+/* ============================================================================
+   Postmark — a circular date stamp, slightly rotated, stamped over delivered
+   mail. The second signature device.
+   ========================================================================== */
+.postmark {
+  width: 92px; height: 92px;
+  border: 2.5px solid var(--postal-red);
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: var(--postal-red);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  transform: rotate(-9deg);
+  opacity: 0.82;
+  mix-blend-mode: multiply;
+  flex: none;
+}
+.postmark .pm-top { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.18em; }
+.postmark .pm-date { font-size: 0.92rem; font-weight: 700; margin: 1px 0; }
+.postmark .pm-loc { font-size: 0.52rem; text-transform: uppercase; letter-spacing: 0.12em; }
+.postmark::before, .postmark::after {
+  content: ""; position: absolute; left: -7px; right: -7px; height: 1px;
+  background: var(--postal-red); opacity: 0.7;
+}
+.postmark { position: relative; }
+.postmark::before { top: 34px; }
+.postmark::after  { bottom: 34px; }
+
+/* ============================================================================
+   Transit tracker — distance + animated ETA bar, styled like postal tracking.
+   ========================================================================== */
+.tracker { font-family: var(--font-mono); }
+.tracker .track-line {
+  position: relative;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--sepia) 0 7px, transparent 7px 14px);
+  margin: 14px 6px;
+}
+.tracker .plane {
+  position: absolute; top: -10px; font-size: 1rem; transform: translateX(-50%);
+  transition: left 0.6s ease;
+}
+.tracker .endpoint {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--postal-blue);
+  position: absolute; top: -3.5px;
+}
+.tracker .endpoint.start { left: -2px; }
+.tracker .endpoint.end   { right: -2px; background: var(--postal-red); }
+
+/* ---- layout shell ------------------------------------------------------- */
+.shell { min-height: 100%; display: flex; flex-direction: column; }
+.page { width: 100%; max-width: var(--w-page); margin: 0 auto; padding: 28px 20px 80px; flex: 1; }
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--ink);
+  color: var(--paper-2);
+  border-bottom: 3px solid var(--postal-red);
+}
+.topbar-inner {
+  max-width: var(--w-page); margin: 0 auto; padding: 0 20px;
+  height: 60px; display: flex; align-items: center; gap: 22px;
+}
+.brand {
+  font-family: var(--font-display); font-weight: 600; font-size: 1.35rem;
+  color: var(--paper-2); text-decoration: none; letter-spacing: -0.01em;
+  display: flex; align-items: center; gap: 9px;
+}
+.brand .plus { color: var(--postal-red); }
+.nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--font-mono); font-size: 0.74rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(251,246,234,0.72); text-decoration: none;
+  padding: 7px 11px; border-radius: var(--r-sm); position: relative;
+}
+.nav a:hover { color: var(--paper-2); background: rgba(251,246,234,0.08); }
+.nav a.active { color: var(--paper-2); }
+.nav a.active::after {
+  content: ""; position: absolute; left: 11px; right: 11px; bottom: 1px; height: 2px;
+  background: var(--postal-red);
+}
+.nav .badge {
+  position: absolute; top: 1px; right: 3px; min-width: 16px; height: 16px;
+  background: var(--postal-red); color: #fff; border-radius: 999px;
+  font-size: 0.62rem; display: grid; place-content: center; padding: 0 3px;
+}
+
+/* ---- avatar (seeded, dependency-free) ----------------------------------- */
+.avatar {
+  border-radius: 50%; flex: none; display: grid; place-content: center;
+  font-family: var(--font-display); font-weight: 600; color: #fff;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35);
+}
+
+/* ---- helpers ------------------------------------------------------------ */
+.row { display: flex; gap: 14px; }
+.row.center { align-items: center; }
+.col { display: flex; flex-direction: column; }
+.between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1; }
+.gap6 { gap: 6px; } .gap10 { gap: 10px; } .gap16 { gap: 16px; }
+.mt0 { margin-top: 0; } .mb0 { margin-bottom: 0; }
+.stack > * + * { margin-top: 18px; }
+.grid { display: grid; gap: 18px; }
+.grid.cols2 { grid-template-columns: repeat(2, 1fr); }
+.grid.cols3 { grid-template-columns: repeat(3, 1fr); }
+.center-text { text-align: center; }
+.divider { height: 1px; background: var(--paper-edge); margin: 18px 0; border: 0; }
+
+.banner {
+  border-radius: var(--r-md); padding: 11px 14px; font-size: 0.92rem;
+  border: 1px solid; margin-bottom: 14px;
+}
+.banner.err { background: #f7e7e4; border-color: #e3b6ae; color: #7c241a; }
+.banner.ok  { background: #e6f0e8; border-color: #b4d3bd; color: #2f5a3c; }
+
+.flag { font-size: 1.05em; }
+.spin { display:inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  text-align: center; padding: 54px 20px; color: var(--sepia);
+}
+.empty .stamp-emoji { font-size: 2.4rem; display: block; margin-bottom: 10px; opacity: 0.7; }
+
+/* ---- responsive --------------------------------------------------------- */
+@media (max-width: 760px) {
+  body { font-size: 16px; }
+  .grid.cols2, .grid.cols3 { grid-template-columns: 1fr; }
+  .topbar-inner { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+  .nav { margin-left: 0; width: 100%; }
+  .hide-sm { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition: none !important; }
+}
+
+:focus-visible { outline: 2.5px solid var(--postal-blue); outline-offset: 2px; border-radius: 2px; }
