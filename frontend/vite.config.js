@@ -16,4 +16,13 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    // Vite 5 blocks unrecognized Host headers by default. Railway serves
+    // this app behind a proxy on a *.up.railway.app domain, so it must be
+    // explicitly allowed (or preview will 403 with "Blocked request").
+    allowedHosts: [
+      "penpalplus-main-production.up.railway.app",
+      ".up.railway.app",
+    ],
+  },
 });
