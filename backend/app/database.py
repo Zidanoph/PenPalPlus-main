@@ -3,7 +3,8 @@
 SQLite is used by default so the project runs with zero setup. Pointing
 DATABASE_URL at PostgreSQL is the only change required for production.
 Railway/Heroku hand out URLs like `postgres://` or `postgresql://`; both are
-normalized to the explicit psycopg2 driver below so SQLAlchemy 2.0 loads cleanly.
+normalized to the psycopg3 driver below (psycopg2-binary was dropped because
+it hit `libpq.so.5: cannot open shared object file` on Railway's build image).
 """
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -12,9 +13,9 @@ from .config import settings
 
 db_url = settings.database_url
 if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
-elif db_url.startswith("postgresql://"):
-    db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
+elif db_url.startswith("postgresql://") and "+psycopg" not in db_url:
+    db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
 
 connect_args = {}
 engine_kwargs = {"future": True}
